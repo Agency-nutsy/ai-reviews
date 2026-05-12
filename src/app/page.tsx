@@ -1,12 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import ReviewCard from "@/components/ReviewCard";
 import { getRandomReviews } from "@/utils/getRandomReviews";
 
-// ── Configuration ──────────────────────────────────────────
-const BUSINESS_NAME = "Bagheera Cafe & Lounge";
-const BUSINESS_ADDRESS = "3rd Floor, 2529, Hudson Lane, GTB Nagar, New Delhi";
 const GOOGLE_REVIEW_URL = "https://g.page/r/CQdkjl8A43uzEAE/review";
 
 export default function Home() {
@@ -17,40 +15,64 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-dvh flex items-start justify-center px-4 py-10 sm:py-16">
-      <div className="w-full max-w-md space-y-8">
-        {/* ── Header ──────────────────────────── */}
-        <header className="text-center space-y-3">
-          {/* Cafe icon */}
-          <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-200/60">
-            <span className="text-3xl">☕</span>
-          </div>
-
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
-            {BUSINESS_NAME}
+    <main className="min-h-dvh flex items-center justify-center px-4 py-6">
+      <div className="w-full max-w-md flex flex-col items-center gap-5">
+        {/* ── Logo ──────────────────────────── */}
+        <div className="flex flex-col items-center gap-2">
+          <Image
+            src="/logo.jpg"
+            alt="Bagheera Cafe & Lounge"
+            width={80}
+            height={80}
+            className="rounded-2xl"
+            priority
+          />
+          <h1
+            className="text-2xl tracking-[0.25em] font-medium"
+            style={{
+              fontFamily: "var(--font-display)",
+              color: "var(--color-gold)",
+            }}
+          >
+            BAGHEERA
           </h1>
+        </div>
 
-          <p className="text-gray-400 text-xs font-medium tracking-wide uppercase">
-            {BUSINESS_ADDRESS}
+        {/* ── Thank you + subtitle ────────── */}
+        <div className="text-center space-y-1">
+          <p
+            className="text-sm"
+            style={{ color: "var(--color-text-secondary)" }}
+          >
+            Thank you for dining with us! 🙏
           </p>
-
-          <p className="text-gray-500 text-sm sm:text-base max-w-xs mx-auto leading-relaxed">
-            Thank you for visiting us! 🙏 Tap a review below to copy it, then
-            paste it on Google — it takes just 10 seconds.
-          </p>
-        </header>
-
-        {/* ── Steps hint ──────────────────────── */}
-        <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-center">
-          <p className="text-amber-800 text-xs sm:text-sm font-medium leading-relaxed">
-            <span className="font-bold">How it works:</span> Tap a review →
-            It&apos;s copied → Choose your rating on Google → Paste in the
-            text box → Post!
+          <p
+            className="text-xs"
+            style={{ color: "var(--color-text-muted)" }}
+          >
+            Tap a review below to leave your feedback on Google
           </p>
         </div>
 
-        {/* ── Review Cards ────────────────────── */}
-        <section className="space-y-4" aria-label="Review options">
+        {/* ── How it works ────────────────── */}
+        <div
+          className="w-full rounded-xl px-4 py-2.5 text-center"
+          style={{
+            background: "var(--color-gold-dim)",
+            border: "1px solid rgba(201, 168, 76, 0.25)",
+          }}
+        >
+          <p
+            className="text-xs leading-relaxed"
+            style={{ color: "var(--color-gold-light)" }}
+          >
+            <span className="font-semibold">How it works:</span> Tap a review →
+            It&apos;s copied → Choose your rating → Paste → Post!
+          </p>
+        </div>
+
+        {/* ── Review Cards ────────────────── */}
+        <section className="w-full space-y-3" aria-label="Review options">
           {reviews.map((review, index) => (
             <ReviewCard
               key={index}
@@ -60,15 +82,13 @@ export default function Home() {
           ))}
         </section>
 
-        {/* ── Footer ──────────────────────────── */}
-        <footer className="text-center pt-2 space-y-1">
-          <p className="text-xs text-gray-400">
-            Your feedback means the world to us ❤️
-          </p>
-          <p className="text-[10px] text-gray-300">
-            Bagheera Cafe & Lounge — Hudson Lane, GTB Nagar
-          </p>
-        </footer>
+        {/* ── Footer ──────────────────────── */}
+        <p
+          className="text-[10px] text-center pb-2"
+          style={{ color: "var(--color-text-muted)" }}
+        >
+          Bagheera Cafe & Lounge — Hudson Lane, GTB Nagar
+        </p>
       </div>
     </main>
   );
