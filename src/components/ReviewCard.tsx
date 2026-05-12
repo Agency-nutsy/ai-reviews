@@ -11,41 +11,50 @@ export default function ReviewCard({ review, googleReviewUrl }: ReviewCardProps)
   const [copied, setCopied] = useState(false);
 
   const handleClick = async () => {
+    // Copy to clipboard first, then redirect immediately
     try {
       await navigator.clipboard.writeText(review);
-      setCopied(true);
-      window.location.href = googleReviewUrl;
-    } catch (err) {
-      // Fallback for older browsers
+    } catch {
+      // Fallback for older browsers / Safari / insecure contexts
       const textarea = document.createElement("textarea");
       textarea.value = review;
+      textarea.setAttribute("readonly", "");
       textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
       textarea.style.opacity = "0";
       document.body.appendChild(textarea);
+      textarea.focus();
       textarea.select();
-      document.execCommand("copy");
+      try {
+        document.execCommand("copy");
+      } catch {
+        // Silently fail — redirect still happens
+      }
       document.body.removeChild(textarea);
-
-      setCopied(true);
-      window.location.href = googleReviewUrl;
     }
+
+    setCopied(true);
+    // Redirect instantly
+    window.location.href = googleReviewUrl;
   };
 
   return (
     <>
       <button
         onClick={handleClick}
-        className="group relative w-full text-left rounded-2xl bg-white p-5 shadow-md
+        className="group relative w-full text-left rounded-2xl bg-white p-5
+                   shadow-[0_2px_12px_rgba(0,0,0,0.06)]
                    border border-gray-100
-                   transition-all duration-300 ease-out
-                   hover:shadow-xl hover:-translate-y-1 hover:border-amber-200
-                   active:scale-[0.97] cursor-pointer"
+                   transition-all duration-200 ease-out
+                   hover:shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 hover:border-amber-200
+                   active:scale-[0.97] active:shadow-sm
+                   cursor-pointer select-none
+                   -webkit-tap-highlight-color-transparent"
+        style={{ WebkitTapHighlightColor: "transparent" }}
       >
-        {/* Star rating decoration */}
-        <div className="flex gap-0.5 mb-3 text-amber-400 text-lg">
-          {[...Array(5)].map((_, i) => (
-            <span key={i}>★</span>
-          ))}
+        {/* Star rating */}
+        <div className="flex gap-0.5 mb-3 text-amber-400 text-lg select-none" aria-hidden="true">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
         </div>
 
         {/* Review text */}
@@ -54,11 +63,11 @@ export default function ReviewCard({ review, googleReviewUrl }: ReviewCardProps)
         </p>
 
         {/* Tap hint */}
-        <div className="mt-4 flex items-center gap-2 text-xs text-amber-600 font-medium opacity-70 group-hover:opacity-100 transition-opacity">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <div className="mt-4 flex items-center gap-2 text-xs text-amber-600 font-medium opacity-60 group-hover:opacity-100 transition-opacity">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
           </svg>
-          Tap to copy & post on Google
+          Tap to copy &amp; post on Google
         </div>
       </button>
 
